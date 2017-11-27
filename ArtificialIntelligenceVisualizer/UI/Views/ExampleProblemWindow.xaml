@@ -1,0 +1,49 @@
+﻿<Window x:Class="ArtificialIntelligenceVisualizer.UI.Views.ExampleProblemWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:ArtificialIntelligenceVisualizer.UI.ViewModels"
+        xmlns:converters="clr-namespace:ArtificialIntelligenceVisualizer.UI.Converters"
+        mc:Ignorable="d"
+        Title="Példa probléma betöltése" Height="300" Width="400">
+    <Window.DataContext>
+        <viewmodels:ExampleProblemViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:SearchMethodEnumConverter x:Key="searchmethodconverter" />
+        <converters:ExampleProblemEnumConverter x:Key="exampleproblemconverter" />
+    </Window.Resources>
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="220"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Content="Probléma" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ComboBox x:Name="problemComboBox" Margin="15" Grid.Row="0" Grid.Column="1" SelectedValue="{Binding SelectedExampleProblem}" ItemsSource="{Binding ExampleProblemList}">
+            <ComboBox.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Converter={StaticResource exampleproblemconverter}}"/>
+            </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
+        
+        <Label Content="Megoldás kereső" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ComboBox x:Name="searchAlgorithmComboBox" Margin="15" Grid.Row="1" Grid.Column="1" SelectedValue="{Binding SelectedSearchMethod}" ItemsSource="{Binding SearchMethodList}">
+            <ComboBox.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Converter={StaticResource searchmethodconverter}}"/>
+            </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button x:Name="createSearchButton" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Megoldás bemutatása" Margin="15" Command="{Binding CreateSearchCommand}"/>
+    </Grid>
+</Window>

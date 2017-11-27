@@ -1,0 +1,17 @@
+﻿<Window x:Class="ArtificialIntelligenceVisualizer.UI.Views.ProblemTypeSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:ArtificialIntelligenceVisualizer.UI.ViewModels"
+        mc:Ignorable="d"
+        Title="Probléma kiválasztása" Height="300" Width="300">
+    <Window.DataContext>
+        <viewmodels:ProblemTypeSelectionViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Button x:Name="exampleProblemButton" Content="Példa probléma betöltése" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Margin="0,-60,0,0" Command="{Binding NavigateToExampleProblemCommand}" />
+        <Button x:Name="customProblemButton" Content="Saját probléma betöltése" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Margin="0,60,0,0" Command="{Binding NavigateToCustomProblemCommand}" />
+
+    </Grid>
+</Window>

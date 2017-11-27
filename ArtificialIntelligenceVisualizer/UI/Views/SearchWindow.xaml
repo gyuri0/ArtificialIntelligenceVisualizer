@@ -1,0 +1,90 @@
+﻿<Window x:Class="ArtificialIntelligenceVisualizer.UI.Views.SearchWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:graphxcontrol="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
+        xmlns:ui="clr-namespace:ArtificialIntelligenceVisualizer.UI"
+        xmlns:viewmodels="clr-namespace:ArtificialIntelligenceVisualizer.UI.ViewModels"
+        xmlns:converters="clr-namespace:ArtificialIntelligenceVisualizer.UI.Converters"
+        mc:Ignorable="d"
+        Title="Megoldás kereső bemutatása" Height="768" Width="1366"
+        WindowState="Maximized">
+    <Window.DataContext>
+        <viewmodels:SearchViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:VertexStatusColorConverter x:Key="vertexstatuscolorconverter" />
+        <converters:EdgeStatusColorConverter x:Key="edgestatuscolorconverter" />
+        <converters:SearchStatusEnumConverter x:Key="searchstatusconverter" />
+        <converters:LayoutTypeEnumConverter x:Key="layouttypeconverter" />
+
+        <Style TargetType="{x:Type graphxcontrol:VertexControl}">
+            <Setter Property="BorderThickness" Value="5,3,5,3"/>
+            <Setter Property="Padding" Value="10,5,10,5"/>
+            <Setter Property="BorderBrush" Value="#FF393939"/>
+            <Setter Property="Foreground" Value="Red"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type graphxcontrol:VertexControl}">
+                        <Border Background="{Binding VertexStatus, Converter={StaticResource vertexstatuscolorconverter}}" 
+                            BorderBrush="{TemplateBinding BorderBrush}"
+							CornerRadius="10,10,10,10"
+						Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <ContentPresenter Content="{TemplateBinding Vertex}" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type graphxcontrol:EdgeControl}">
+            <Setter Property="Foreground" Value="{Binding EdgeStatus, Converter={StaticResource edgestatuscolorconverter}}"/>
+            <Setter Property="ShowLabel" Value="True" />
+        </Style>
+
+        <Style TargetType="{x:Type graphxcontrol:EdgeLabelControl}">
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="FontSize" Value="36" />
+            <Setter Property="Margin" Value="36,0,0,0"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+
+        <graphxcontrol:ZoomControl x:Name="zoomctrl" Grid.Row="0" Grid.Column="0" Grid.RowSpan="5">
+            <ui:GraphArea x:Name="Area" LogicCoreChangeAction="GenerateGraphWithEdges" LogicCore="{Binding LogicCore}">
+            </ui:GraphArea>
+        </graphxcontrol:ZoomControl>
+        <Label x:Name="statusLabel" Content="{Binding SearchStatus, Converter={StaticResource searchstatusconverter}}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <Button x:Name="nextStepButton" Content="Következő lépés" Grid.Row="1" Grid.Column="1" Command="{Binding NextStepCommand}" Margin="15"/>
+        <ComboBox SelectedValue="{Binding SelectedLayout}" ItemsSource="{Binding LayoutTypeList}" Grid.Column="1" Grid.Row="2" Margin="15" >
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource layouttypeconverter}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button Content="Új probléma választása" Command="{Binding NewProblemCommand}" Grid.Row="3" Grid.Column="1" Margin="15"/>
+    </Grid>
+
+</Window>
